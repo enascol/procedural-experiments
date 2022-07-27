@@ -14,6 +14,10 @@ def generate(rows, columns, noise_density=0):
     
     return grid
 
+def copy(grid):
+    rows, columns = len(grid), len(grid[0])
+    return np.array([[grid[x][y] for y in range(columns)] for x in range(rows)])
+
 def show(grid, hide_zeroes=False):
     for row in grid:
         if hide_zeroes:

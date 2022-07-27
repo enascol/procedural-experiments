@@ -48,7 +48,7 @@ class Grid:
 
         return is_valid and is_empty and has_free_side
 
-    def upgrade_position(self, x, y):
+    def upgrade_position(self, cur_grid, x, y):
         bottom, bottom_left, bottom_rght = (x + 1, y), (x + 1, y - 1) , (x + 1, y + 1)
 
         empty_valid_positions = list(
@@ -60,22 +60,27 @@ class Grid:
         
         if len(empty_valid_positions) >= 1:
             if bottom in empty_valid_positions:
-                self.grid[bottom[0]][bottom[1]] = 1
+                cur_grid[bottom[0]][bottom[1]] = 1
             else:
                 new_x, new_y = random.choice(empty_valid_positions)
-                self.grid[new_x][new_y] = 1
+                cur_grid[new_x][new_y] = 1
             
-            self.grid[x][y] = 0
+            cur_grid[x][y] = 0
         
 
 grid = Grid(100, 100)
-grid.generate(density = 5)
-grid[0][50] = 1
-grid[0][0] = 1
+grid.generate(density = 0)
 
-for x in range(grid.rows):
-    for y in range(grid.columns):
-        if grid[x][y] == 1:
-            grid.upgrade_position(x, y)
-    convert.convert(grid, "grid")
-    time.sleep(0.1)
+bg_color = 	(135, 206, 235)
+sand_color = (138, 123, 90)
+while True:
+    cur_grid = grd.copy(grid.grid)
+    y  = random.randint(25, 75)
+    cur_grid[0][y] = 1
+    for x in range(grid.rows):
+        for y in range(grid.columns):
+            if grid[x][y] == 1:
+                grid.upgrade_position(cur_grid, x, y)
+    grid.grid = cur_grid
+    convert.convert(grid, "grid", colors = {1: sand_color, 0: bg_color})
+    time.sleep(0.05)
