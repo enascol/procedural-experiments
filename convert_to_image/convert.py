@@ -1,5 +1,5 @@
 from copy import deepcopy
-from PIL import Image
+import cv2
 
 import numpy as np
 import random
@@ -28,7 +28,11 @@ def convert(matrix, name ="IMG", colors = {1: (255, 255, 255), 0: (0, 0, 0)}):
                 colors[pixel] = pixel_color
                 base[x][y] = colors[pixel]
 
-    print(colors)
-    numpy_matrix = np.asarray(base, dtype=np.uint8)
-    img = Image.fromarray(numpy_matrix)
-    img.save(f"{name}.png")
+    base = np.asarray(base, dtype=np.uint8)
+    cv2.imwrite(f'{name}.png', cv2.cvtColor(base, cv2.COLOR_RGB2BGR))
+    #cv2.imshow("image", img)
+    #cv2.waitKey()
+
+#    numpy_matrix = np.asarray(base, dtype=np.uint8)
+#    img = Image.fromarray(numpy_matrix)
+#    img.save(f"{name}.png")
