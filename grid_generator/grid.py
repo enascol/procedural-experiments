@@ -16,7 +16,7 @@ def generate(rows, columns, noise_density=0):
 
 def get_dimensions(grid):
     return len(grid), len(grid[0])
-    
+
 def copy(grid):
     rows, columns = len(grid), len(grid[0])
     return np.array([[grid[x][y] for y in range(columns)] for x in range(rows)])
@@ -35,6 +35,38 @@ def is_valid_position(grid, x, y):
     valid_y = (y >= 0) and (y < columns)
     
     return valid_x and valid_y
+
+def get_all_directions_name():
+    directions = (
+        "dlt",
+        "top",
+        "drt",
+        "left",
+        "right",
+        "dlb",
+        "down",
+        "drb"
+    )
+    
+    return directions
+    
+def get_direction_name(x, y, dir_x, dir_y):
+    if (dir_x, dir_y) == (x - 1, y - 1):
+        return "dlt"
+    elif (dir_x, dir_y) == (x - 1, y):
+        return "top"
+    elif (dir_x, dir_y) == (x - 1, y + 1):
+        return "drt"
+    elif (dir_x, dir_y) == (x, y - 1):
+        return "left"
+    elif (dir_x, dir_y) == (x, y + 1):
+        return "right"
+    elif (dir_x, dir_y) == (x + 1, y - 1):
+        return "dlb"
+    elif (dir_x, dir_y) ==  (x + 1, y):
+        return "down"
+    elif (dir_x, dir_y) == (x + 1, y + 1):
+        return "drb"
 
 def get_adjacent_positions(x, y):
     dlt = x - 1, y - 1

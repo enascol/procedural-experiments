@@ -83,13 +83,5 @@ def update_grid(grid):
     for x in range(rows):
         for y in range(columns):
             update_cell(grid, new_grid, x, y)
-    
-    convert.convert(grid, "gol", colors = colors)
-    time.sleep(0.05)
 
     return new_grid
-
-grid = generate_grid(100, 100, 50)
-
-while True:
-    grid = update_grid(grid)

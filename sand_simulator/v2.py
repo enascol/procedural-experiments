@@ -120,34 +120,38 @@ def add_random_platforms(amount, platform_size):
             if grd.is_valid_position(grid, r, c + l):
                 grid[r][c + l] = 3
 
-add_random_block(25)
-
 c1 = column - int(columns / 3)
 c2 = column
 c3 = column + int(columns / 3)
 
 spread = 0
 
-count = 5
+count = 0
 
+for x in range(rows):
+    for y in range(columns):
+        r = random.randint(1, 100) < 10
+
+        if r:
+            grid[x, y] = 1
+
+count = 0
 while True:
     cur_grid = grd.copy(grid.grid)
-
-    cur_grid[0][random.randint(c1 - spread, c1 + spread)] = random.choice(range(3, count))
-    cur_grid[0][random.randint(c2 - spread, c2 + spread)] = random.choice(range(3, count))
-    cur_grid[0][random.randint(c3 - spread, c3 + spread)] = random.choice(range(3, count))
     for x in range(grid.rows):
         for y in range(grid.columns):
             pixel_v = grid[x][y]
-            if grid[x][y] in  range(4, count):
+            if grid[x][y] == 1:
                 grid.upgrade_sand_position(cur_grid, x, y, step =1)
             elif grid[x][y] == 2:
                 grid.upgrade_water_position(cur_grid, x, y, step =1)
-    
-    if count < 20:
-        count += 1
-        colors[count] = [random.randint(0, 255) for x in range(3)]
+    if count == 3:
+        break
 
+    if (grid.grid == cur_grid).all():
+        count += 1
+    else:
+        count = 0
     grid.grid = cur_grid
     convert.convert(grid, "grid", colors = colors)
     time.sleep(0.04)
