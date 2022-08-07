@@ -4,10 +4,12 @@ import numpy as np
 
 import rules as _rules
 import sys
-import random
+sys.path.append("./")
 
-columns = 950
-rows = 480
+import convert_to_image.convert as cvt
+
+columns = 300
+rows = 250
 #rule = int(sys.argv[1])
 
 def get_current_cell_value(grid, x):
@@ -57,4 +59,4 @@ def convert_to_imag(grid, name ="hii"):
 
 for x in range(256):
     rule = x
-    convert_to_imag(build_grid(), name =f"rule {rule}")
+    cvt.convert(build_grid(), name =f"rule")

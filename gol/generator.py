@@ -58,16 +58,25 @@ def get_adjacent_values(grid, x, y):
     adjacent_positions = get_valid_adjacent_positions(grid, x, y)
     return sum([grid[x, y] for x, y in adjacent_positions])
 
-def update_cell(base_grid, new_grid, x,  y):
+def update_cell(base_grid, new_grid, x,  y, prob =False):
     cell_value = base_grid[x, y]
     adjacent_values = get_adjacent_values(base_grid, x, y)
 
     if cell_value == 1 and adjacent_values >= 4:
-        new_grid[x, y] = 0
+        if prob and random.randint(1, 100) <= 5:
+            new_grid[x, y] = 0
+        elif not prob:
+            new_grid[x, y] = 0
     elif cell_value == 1 and adjacent_values <= 1:
-        new_grid[x, y] = 0
+        if prob and random.randint(1, 100) <= 10:
+            new_grid[x, y] = 0
+        elif not prob:
+            new_grid[x, y] = 0
     elif cell_value == 0 and adjacent_values == 3:
-        new_grid[x, y] = 1
+        if prob and random.randint(1, 100) <= 75:
+            new_grid[x, y] = 1
+        elif not prob:
+            new_grid[x, y] = 1
     else:
         pass
 
@@ -76,12 +85,12 @@ fg = [random.randint(0, 255) for x in range(3)]
 
 colors = {0: bg, 1: fg}
 
-def update_grid(grid):
-    rows, columns = len(grid), len(grid[0])
-    new_grid = np.array([[grid[x][y] for y in range(columns)] for x in range(rows)])
+def update_grid(grid, prob = False):
+    rows, columns = grid.shape
+    new_grid = grid.copy()
 
     for x in range(rows):
         for y in range(columns):
-            update_cell(grid, new_grid, x, y)
+            update_cell(grid, new_grid, x, y, prob)
 
     return new_grid

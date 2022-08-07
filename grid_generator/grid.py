@@ -14,11 +14,12 @@ def generate(rows, columns, noise_density=0):
     
     return grid
 
+
 def get_dimensions(grid):
     return len(grid), len(grid[0])
 
 def copy(grid):
-    rows, columns = len(grid), len(grid[0])
+    rows, columns = grid.shape
     return np.array([[grid[x][y] for y in range(columns)] for x in range(rows)])
 
 def show(grid, hide_zeroes=False):
@@ -29,7 +30,7 @@ def show(grid, hide_zeroes=False):
             print("".join([str(x) for x in row]))
 
 def is_valid_position(grid, x, y):
-    rows, columns = len(grid), len(grid[0])
+    rows, columns = grid.shape
     
     valid_x = (x >= 0) and (x < rows)
     valid_y = (y >= 0) and (y < columns)
@@ -49,7 +50,7 @@ def get_all_directions_name():
     )
     
     return directions
-    
+
 def get_direction_name(x, y, dir_x, dir_y):
     if (dir_x, dir_y) == (x - 1, y - 1):
         return "dlt"
@@ -80,6 +81,16 @@ def get_adjacent_positions(x, y):
 
     return dlt, top, drt, left, right, dlb, down, drb
 
+def get_valid_vn_neighboorhood(grid, x, y):
+    n  = [
+        (x - 1, y), #UP
+        (x + 1, y), #DOWN
+        (x, y + 1), #RIGHT
+        (x, y - 1), #LEFT
+    ]
+
+    return [(x, y) for x, y in n if is_valid_position(grid, x, y)]
+    
 def get_valid_adjacent_positions(grid, x, y):
     adjacent_positions = get_adjacent_positions(x, y)
     valid_positions = [(x, y) for x, y in adjacent_positions if is_valid_position(grid, x, y)]
@@ -89,3 +100,20 @@ def get_valid_adjacent_positions(grid, x, y):
 def get_adjacent_values(grid, x, y):
     adjacent_positions = get_valid_adjacent_positions(grid, x, y)
     return sum([grid[x, y] for x, y in adjacent_positions])
+
+def convert_to_grid(string):
+    pattern = string.split("\n")
+    max_len = len(max(pattern, key=len))
+
+    for index, row in enumerate(pattern):
+        row = row.replace("O", "1")
+        row = row.replace(".", "0")
+
+        if len(row) < max_len:
+            row += ("0" * (max_len - len(row)))
+
+        pattern[index] = [int(cell) for cell in row]
+
+    grid = np.array(pattern)
+
+    return grid
