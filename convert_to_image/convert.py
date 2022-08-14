@@ -1,22 +1,15 @@
-from genericpath import isdir
 import cv2
-import os.path
+import  inspect
 import numpy as np
+import os.path
 import random
 import sys
 
 sys.path.append("./")
 from grid_generator.grid import copy as copy_grid
+from color_manipulation import colors
+
 import PATHS
-
-def get_random_color(base=(None, None, None)):
-    r, g, b = base
-    
-    if not r: r = random.randint(0, 255)
-    if not b: b = random.randint(0, 255)
-    if not g: g = random.randint(0, 255)
-
-    return r, g, b
 
 def convert(matrix, name ="IMG", colors = {1: (255, 255, 255), 0: (0, 0, 0)}):
     rows, columns =  len(matrix), len(matrix[0])
@@ -35,6 +28,9 @@ def convert(matrix, name ="IMG", colors = {1: (255, 255, 255), 0: (0, 0, 0)}):
     if not os.path.exists(PATHS.IMAGE_FOLDER):
         os.mkdir(PATHS.IMAGE_FOLDER)
     
+    name = inspect.stack()[1].filename.split("\\")[-2]
     path_to_save = PATHS.save_image_path(f"{name}.png")
     base = np.asarray(base, dtype=np.uint8)
     cv2.imwrite(path_to_save, cv2.cvtColor(base, cv2.COLOR_RGB2BGR))
+
+    return base, colors

@@ -18,6 +18,7 @@ def generate(rows, columns, noise_density=0):
 def get_dimensions(grid):
     return len(grid), len(grid[0])
 
+
 def copy(grid):
     rows, columns = grid.shape
     return np.array([[grid[x][y] for y in range(columns)] for x in range(rows)])
@@ -101,6 +102,17 @@ def get_adjacent_values(grid, x, y):
     adjacent_positions = get_valid_adjacent_positions(grid, x, y)
     return sum([grid[x, y] for x, y in adjacent_positions])
 
+def get_adjacent_positions_values(grid, x, y):
+    return [grid[nx, ny] for (nx, ny) in get_valid_adjacent_positions(grid, x, y)]
+
+def get_cell_types(grid):
+    return np.unique(grid)
+
+def count_cell_types(grid):
+    types = get_cell_types(grid)
+    
+    return {ct:np.count_nonzero(grid == ct) for ct in types}
+    
 def convert_to_grid(string):
     pattern = string.split("\n")
     max_len = len(max(pattern, key=len))
