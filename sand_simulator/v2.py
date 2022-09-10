@@ -72,6 +72,8 @@ class Grid:
             cur_grid[x][y] = 0
     
     def upgrade_water_position(self, cur_grid, x, y, step =1):
+        if x == self.rows - 1: return 
+        
         a_pos  = (x + 1, y), (x, y + 1), (x, y - 1)
 
         empty_valid_positions = list(
@@ -133,7 +135,7 @@ for x in range(rows):
         r = random.randint(1, 100) < 10
 
         if r:
-            grid[x, y] = 1
+            grid[x, y] = 2
 
 count = 0
 while True:

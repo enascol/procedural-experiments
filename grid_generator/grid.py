@@ -9,11 +9,25 @@ def generate(rows, columns, noise_density=0):
     else:
         for row in range(rows):
             for column in range(columns):
-                add_noise = random.randint(1, 100) < noise_density
+                add_noise = random.randint(0, 100) < noise_density
                 grid[row, column] = add_noise * 1
     
     return grid
 
+def generate_random_values(rows, columns, random_range, density =100):
+    grid = np.array([[0 for _ in range(columns)] for _ in range(rows)])
+    if density == 0:
+        return grid
+    else:
+        start, end = random_range
+        for row in range(rows):
+            for column in range(columns):
+                add_value = random.randint(0, 100) < density
+                if add_value:
+                    grid[row, column] = random.randint(start, end)
+
+        return grid
+    
 
 def get_dimensions(grid):
     return len(grid), len(grid[0])
@@ -30,13 +44,26 @@ def show(grid, hide_zeroes=False):
         else:
             print("".join([str(x) for x in row]))
 
-def is_valid_position(grid, x, y):
+def is_on_border(grid, x, y, border_size =0):
+    rows, columns = grid.shape
+    zero_axis = x == 0 or y == 0
+    rc_axis = (x == (rows - 1)) or (y == (columns - 1))
+
+    return zero_axis or rc_axis
+    
+def is_valid_position(grid, x, y, check_empty =False):
     rows, columns = grid.shape
     
     valid_x = (x >= 0) and (x < rows)
     valid_y = (y >= 0) and (y < columns)
+    valid_pos = valid_x and valid_y
     
+    if check_empty and valid_pos:
+        return grid[x, y] == 0
     return valid_x and valid_y
+
+def is_valid_position_sequence(grid, seq):
+    return [(x, y) for x, y in seq if is_valid_position(grid, x, y)]
 
 def get_all_directions_name():
     directions = (
@@ -82,7 +109,7 @@ def get_adjacent_positions(x, y):
 
     return dlt, top, drt, left, right, dlb, down, drb
 
-def get_valid_vn_neighboorhood(grid, x, y):
+def get_valid_vn_neighboorhood(grid, x, y, check_empty =False):
     n  = [
         (x - 1, y), #UP
         (x + 1, y), #DOWN
@@ -90,11 +117,11 @@ def get_valid_vn_neighboorhood(grid, x, y):
         (x, y - 1), #LEFT
     ]
 
-    return [(x, y) for x, y in n if is_valid_position(grid, x, y)]
+    return [(x, y) for x, y in n if is_valid_position(grid, x, y, check_empty)]
     
-def get_valid_adjacent_positions(grid, x, y):
+def get_valid_adjacent_positions(grid, x, y, check_empty =False):
     adjacent_positions = get_adjacent_positions(x, y)
-    valid_positions = [(x, y) for x, y in adjacent_positions if is_valid_position(grid, x, y)]
+    valid_positions = [(x, y) for x, y in adjacent_positions if is_valid_position(grid, x, y, check_empty)]
 
     return valid_positions
 

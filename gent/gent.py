@@ -2,7 +2,7 @@ import random
 import sys
 import time
 
-sys.path.append("./")
+sys.path.append("\\".join(__file__.split("\\")[:-2]))
 
 from grid_generator.grid import *
 from convert_to_image.convert import *
